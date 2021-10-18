@@ -20,7 +20,7 @@ int main () {
 
     
     // Make shared process between prod and cons
-    void* shmem = create_shared_memory(1024)
+    void* shmem = create_shared_memory(1024);
     // Set the size of the mem space
 
     // Loop through production
