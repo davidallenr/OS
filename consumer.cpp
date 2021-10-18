@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
-
+#include <stdlib.h>
+#include <sys/mman.h>   //Used for memory manamgent
+#include <semaphore.h>  //Used for Semaphores
 
 int main () {
     //Create variable
@@ -10,7 +12,7 @@ int main () {
     // Set the size of the mem space
 
     // Loop through consumer
-        // wait (fill)
+        // wait (full)
         // wait on mutex
         // decrease size
         // post mutex
