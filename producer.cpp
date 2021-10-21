@@ -1,5 +1,4 @@
 #include <iostream>
-#include <string>
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
@@ -19,8 +18,8 @@ int main () {
     const char *fill_semaphore = "Full";
     const char *avail_sempahore = "Available";
     const char *mutex_semaphore = "Mutex";
-    const char *end_semaphore = "End";
-    sem_t *fill, *available, *mutex, *end;
+    const int MAX_TABLE_SIZE = 2;
+    sem_t *fill, *available, *mutex;
     int shared_memory_file_descriptor;
     int *table;
     int loop_count = 5;
@@ -39,40 +38,34 @@ int main () {
 
     mutex = sem_open(mutex_semaphore,O_CREAT,0666,1);
 
-    end = sem_open(end_semaphore,O_CREAT,0666,2);
-
-    // Loop through production
-        // wait (available)
-        // wait on mutex
-        // increase size
-        // post mutex
-        // post (full)
     std::cout << "\n" << std::endl;
     while(loop_count--){
+        //std::cout << "P Loop Count: " << loop_count << std::endl;
         sem_wait(available);
         sleep(rand()%2+1);
         sem_wait(mutex);
-        (* table)++;
+        //limit table size
+        if(*table < MAX_TABLE_SIZE){
+            (* table)++;
+        }
         sem_post(mutex);
         std::cout << "Producer: Produce an item. There are " << *table << " item(s).\n";
         sem_post(fill);
     }
-
-    sem_post(end);
-
+    
     std::cout << "Producer: Cycle limit. " << *table << " product(s) are left.\n";
     
-    // Close/unlink connections
-    // Remove shared memory
-    /* close and unlink semaphores*/
+    /* 
+        Close and unlink semaphores
+        Remove Shared memory
+    */
     sem_close(fill);
     sem_close(available);
     sem_close(mutex);
-    sem_close(end);
     sem_unlink(fill_semaphore);
     sem_unlink(avail_sempahore);
     sem_unlink(mutex_semaphore);
-    sem_unlink(end_semaphore);
+
     /* close and unlink shared memory*/
     munmap(table, sizeof(int));
     close(shared_memory_file_descriptor);

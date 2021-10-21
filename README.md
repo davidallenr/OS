@@ -19,7 +19,7 @@ This is an example of how to list things you need to use the software and how to
    ```sh
    git clone https://github.com/davidallenr/OS.git
    ```
-2.
+2. Compile the program
    ```sh
    g++ producer.cpp -pthread -lrt -o producer
    g++ consumer.cpp -pthread -lrt -o consumer
