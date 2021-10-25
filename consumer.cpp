@@ -48,16 +48,14 @@ int main () {
         sem_wait(mutex);
         (* table)--;
         sem_post(mutex);
-        std::cout << "Consumer: Consume an item. There are " << *table << " item(s).\n";
+        std::cout << "CONSUMER: Consume an item. There are " << *table << " item(s).\n";
         sem_post(available);
     }
-
-    std::cout << "Consumer: Cycle limit. " << *table << " product(s) are left.\n";
-
-    /* 
-        Close and unlink semaphores
-        Remove Shared memory
-    */
+    std::cout << "----------------------------------------------\n";
+    std::cout << "CONSUMER: Cycle limit. " << *table << " product(s) are left.\n";
+    std::cout << "----------------------------------------------\n";
+    
+    // Close and unlink semaphores Remove Shared memory
     sem_close(fill);
     sem_close(available);
     sem_close(mutex);
@@ -78,6 +76,7 @@ int main () {
     https://www.ibm.com/docs/en/i/7.4?topic=ssw_ibm_i_74/apis/ipcsemge.htm
     0 means the get_value() was successful
     -1 indicates an error
+    Used for debugging
 */
 void PrintSemaphoreValue(std::string name, sem_t *semaphore, int &value) {
     std::cout << name << " value: " << sem_getvalue(semaphore, &value) << std::endl;

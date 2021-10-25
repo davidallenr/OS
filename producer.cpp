@@ -17,7 +17,7 @@ int main () {
     const char *fill_semaphore = "Full";
     const char *avail_sempahore = "Available";
     const char *mutex_semaphore = "Mutex";
-    const int MAX_TABLE_SIZE = 2;
+    const int MAX_TABLE_QUANTITY = 2;
     sem_t *fill, *available, *mutex;
     int shared_memory_file_descriptor;
     int *table;
@@ -39,29 +39,30 @@ int main () {
 
     std::cout << "\n" << std::endl;
     while(loop_count--){
-        //std::cout << "P Loop Count: " << loop_count << std::endl;
         sem_wait(available);
         sleep(rand()%2+1);
         sem_wait(mutex);
+        
         //limit table size
-        if(*table < MAX_TABLE_SIZE){
+        if(*table < MAX_TABLE_QUANTITY){
             (* table)++;
-            std::cout << "Producer: Produce an item. There are " << *table << " item(s).\n";
+            std::cout << "PRODUCER: Produce an item. There are " << *table << " item(s).\n";
             sem_post(mutex); 
             sem_post(fill);
-        } else {
-            std::cout << "Producer: Table Full. There are " << *table << " item(s).\n";
-        }
-        
-        
+
+            if (*table == MAX_TABLE_QUANTITY){
+                std::cout << "***   PRODUCER TABLE FULL   ***\n";
+            }
+        } 
     }
+
+    std::cout << "----------------------------------------------\n";
+    std::cout << "PRODUCER: Cycle limit. " << *table << " product(s) are left.\n";
+    std::cout << "----------------------------------------------\n";
     
-    std::cout << "Producer: Cycle limit. " << *table << " product(s) are left.\n";
-    
-    /* 
-        Close and unlink semaphores
-        Remove Shared memory
-    */
+   
+        
+    // Close and unlink semaphores Remove Shared memory
     sem_close(fill);
     sem_close(available);
     sem_close(mutex);
@@ -69,7 +70,7 @@ int main () {
     sem_unlink(avail_sempahore);
     sem_unlink(mutex_semaphore);
 
-    /* close and unlink shared memory*/
+    // close and unlink shared memory 
     munmap(table, sizeof(int));
     close(shared_memory_file_descriptor);
     shm_unlink(name);
