@@ -46,9 +46,13 @@ int main () {
         //limit table size
         if(*table < MAX_TABLE_SIZE){
             (* table)++;
+            std::cout << "Producer: Produce an item. There are " << *table << " item(s).\n";
+        } else {
+            std::cout << "Producer: Table Full. There are " << *table << " item(s).\n";
         }
+        
         sem_post(mutex);
-        std::cout << "Producer: Produce an item. There are " << *table << " item(s).\n";
+        
         sem_post(fill);
     }
     
