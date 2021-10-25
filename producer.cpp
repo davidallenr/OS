@@ -47,13 +47,13 @@ int main () {
         if(*table < MAX_TABLE_SIZE){
             (* table)++;
             std::cout << "Producer: Produce an item. There are " << *table << " item(s).\n";
+            sem_post(mutex); 
+            sem_post(fill);
         } else {
             std::cout << "Producer: Table Full. There are " << *table << " item(s).\n";
         }
         
-        sem_post(mutex);
         
-        sem_post(fill);
     }
     
     std::cout << "Producer: Cycle limit. " << *table << " product(s) are left.\n";
